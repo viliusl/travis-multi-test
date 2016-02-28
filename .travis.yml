@@ -3,9 +3,9 @@ language: java
 #install: true
 script: mvn clean verify
 
-#os:
-# - linux
-# - osx
+os:
+ - linux
+ - osx
 
 #jdk:
 # - openjdk7
