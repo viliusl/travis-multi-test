@@ -1,7 +1,7 @@
 ---
 language: java
 install: true
-script: mvn install
+script: TARGET
 jdk:
 - openjdk7
 - oraclejdk7
@@ -15,10 +15,10 @@ before_install:
   - sed -e "s/^\\(127\\.0\\.0\\.1.*\\)/\\1 $(hostname | cut -c1-63)/" /etc/hosts | sudo tee /etc/hosts
   - cat /etc/hosts # optionally check the content *after*
 
-#env:
-#  matrix:
-#    - TARGET='mvn test'
-#    - TARGET='mvn install -DskipTests=true'
+env:
+  matrix:
+    - TARGET='mvn test'
+    - TARGET='mvn install -DskipTests=true'
 
 notifications:
   email:
