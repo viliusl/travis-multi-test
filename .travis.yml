@@ -8,8 +8,13 @@ os:
  - osx
 
 before_install:
- - echo "MAVEN_OPTS='-Xmx2048m -XX:MaxPermSize=512m'" > ~/.mavenrc
+# os x workaround for JAVA_HOME not set and mvn missing
  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_home); fi
+# installing libaio1 on linux - this is requirement by mysql
+ - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get update -qq && sudo apt-get install -y libaio1; fi
+# fixing hostname issue and jdk segfaulting on linux
+ - sudo hostname "$(hostname | cut -c1-63)"
+ - sed -e "s/^\\(127\\.0\\.0\\.1.*\\)/\\1 $(hostname | cut -c1-63)/" /etc/hosts | sudo tee /etc/hosts
 
 #jdk:
 # - openjdk7
@@ -22,8 +27,6 @@ before_install:
 #      - libaio1
 #
 #before_install:
-# - sudo apt-get update -qq
-# - sudo apt-get install -y libaio1
 # - cat /etc/hosts # optionally check the content *before*
 # - sudo hostname "$(hostname | cut -c1-63)"
 # - sed -e "s/^\\(127\\.0\\.0\\.1.*\\)/\\1 $(hostname | cut -c1-63)/" /etc/hosts | sudo tee /etc/hosts
